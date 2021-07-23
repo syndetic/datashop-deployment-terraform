@@ -2,8 +2,8 @@
 
 ## Infrastructure
 
- + Put a secure password for the DB in config/secrets.tfvars 
- + Customize variables in config/config.tfvars
+ + Put a secure password for the DB in config/secrets.tfvars.sample and rename to config/secrets.tfvars
+ + Customize variables in config/config.tfvars.sample and rename to config/config.tfvars
  + Update service-account-for-alb.yml with your AWS account ID (
 
 Run the following commands:
