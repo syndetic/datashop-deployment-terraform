@@ -20,7 +20,7 @@ policy, but not the service account inside kubernetes. For that run:
 
 kubectl apply -f kubernetes/service-account-for-alb.yaml
 
-Then, (from https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html):
+Then (from https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html):
 
 kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
 helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller \
