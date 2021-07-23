@@ -144,8 +144,8 @@ resource "aws_iam_user_policy" "datashop-app-po" {
             "Effect": "Allow",
             "Action": "s3:*",
             "Resource": [
-                "arn:aws:s3:::syndetic-staging",
-                "arn:aws:s3:::syndetic-staging/*"
+                "arn:aws:s3:::${var.s3_bucket_name}",
+                "arn:aws:s3:::${var.s3_bucket_name}/*"
             ]
         }
     ]
