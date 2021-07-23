@@ -1,4 +1,4 @@
-# Provisioning an AWS account to run the Syndetic data shop
+# Provisioning AWS to run the Syndetic data shop
 
 ## Infrastructure
 
@@ -8,19 +8,20 @@
 
 Run the following commands:
 
-nterraform init
+terraform init
 terraform plan --var-file=./secrets/secrets.tfvars
 terraform apply --var-file=./secrets/secrets.tfvars
 
 ## Load balancer
 
-You can't run a load balancer yet. The above sets up the OpenID
-provider, a role, and a policy, but not the service account inside
-kubernetes:
+You can't run a load balancer without further steps. The previous
+terraform invocation sets up the OpenID provider, a role, and a
+policy, but not the service account inside kubernetes. For that run:
 
 kubectl apply -f kubernetes/service-account-for-alb.yaml
 
-From https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html
+Then, (from https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html):
+
 kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
 helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller \
   --set clusterName=staging-eks-jbw14mbB \
