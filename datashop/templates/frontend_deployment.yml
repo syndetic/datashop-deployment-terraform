@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: datashop-web
+  labels:
+    app: datashop
+    tier: frontend
+spec:
+  selector:
+    matchLabels:
+      app: datashop
+      tier: frontend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: datashop
+        tier: frontend
+    spec:
+      containers:
+      - name: datashop-web
+        image: 748203753874.dkr.ecr.us-east-1.amazonaws.com/datashop-web
+        resources:
+          requests:
+            cpu: 500m
+            memory: 500Mi
+        readinessProbe:
+          httpGet:
+              path: /api/healthy
+              port: 8080
+          initialDelaySeconds: 10
+        env:
+        - name: GET_HOSTS_FROM
+          value: dns
+        - name: "DATABASE_URL"
+          valueFrom:
+            secretKeyRef:
+              name: datashop-web
+              key: database-url
+        - name: "RAILS_MASTER_KEY"
+          valueFrom:
+            secretKeyRef:
+              name: datashop-web
+              key: rails-master-key
+        - name: AWS_S3_BUCKET
+          valueFrom:
+            secretKeyRef:
+              name: datashop-web
+              key: aws-bucket-name
+        - name: AWS_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: datashop-web
+              key: aws-access-key-id
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: datashop-web
+              key: aws-secret-access-key
+        - name: CLOUDFRONT_HOST
+          valueFrom:
+            secretKeyRef:
+              name: datashop-web
+              key: cloudfront-host
+        envFrom:
+        - configMapRef:
+            name: datashop-config
+        ports:
+        - containerPort: 8080

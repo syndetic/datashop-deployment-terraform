@@ -1,0 +1,15 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: datashop-config
+  labels:
+    app: datashop
+data:
+  LOG_LEVEL: info
+  RAILS_ENV: production
+  RAILS_LOG_TO_STDOUT: 'true'
+  RAILS_SERVE_STATIC_FILES: 'true'
+  WEB_CONCURRENCY: '1'
+  CLOUD_PROVIDER: AWS
+  PORT: '8080'

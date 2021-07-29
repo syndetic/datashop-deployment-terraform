@@ -1,0 +1,74 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: datashop-daily-subscriptions
+spec:
+  schedule: "30 10 * * *"
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: datashop-daily-subscriptions
+              image: 748203753874.dkr.ecr.us-east-1.amazonaws.com/datashop-web:latest
+              command: ['bundle', 'exec', 'rails', 'subscriptions:daily_downloads']
+              env:
+              - name: GET_HOSTS_FROM
+                value: dns
+              - name: "DATABASE_URL"
+                valueFrom:
+                  secretKeyRef:
+                    name: datashop-web
+                    key: database-url
+              - name: "RAILS_MASTER_KEY"
+                valueFrom:
+                  secretKeyRef:
+                    name: datashop-web
+                    key: rails-master-key
+              - name: "SENTRY_DSN"
+                valueFrom:
+                  secretKeyRef:
+                    name: datashop-web
+                    key: sentry-dsn
+              - name: STRIPE_PUBLISHABLE_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: datashop-web
+                    key: stripe-publishable-key
+              - name: STRIPE_SECRET_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: datashop-web
+                    key: stripe-secret-key
+              - name: AWS_S3_BUCKET
+                valueFrom:
+                  secretKeyRef:
+                    name: datashop-web
+                    key: aws-bucket-name
+              - name: AWS_ACCESS_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: datashop-web
+                    key: aws-access-key-id
+              - name: AWS_SECRET_ACCESS_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: datashop-web
+                    key: aws-secret-access-key
+              - name: MAILGUN_API_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: datashop-web
+                    key: mailgun-api-key
+              - name: CLOUDFRONT_HOST
+                valueFrom:
+                  secretKeyRef:
+                    name: datashop-web
+                    key: cloudfront-host
+              envFrom:
+              - configMapRef:
+                  name: datashop-config
+              ports:
+              - containerPort: 8080

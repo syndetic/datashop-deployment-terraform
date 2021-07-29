@@ -1,0 +1,68 @@
+apiVersion: apps/v1 #  for k8s versions before 1.9.0 use apps/v1beta2  and before 1.8.0 use extensions/v1beta1
+kind: Deployment
+metadata:
+  name: datashop-util
+  labels:
+    app: datashop
+    tier: util
+spec:
+  selector:
+    matchLabels:
+      app: datashop
+      tier: util
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: datashop
+        tier: util
+    spec:
+      containers:
+      - name: datashop-util
+        stdin: true
+        tty: true
+        image: 748203753874.dkr.ecr.us-east-1.amazonaws.com/datashop-web
+        resources:
+          requests:
+            cpu: 500m
+            memory: 500Mi
+        command:
+          - /bin/bash
+        env:
+        - name: GET_HOSTS_FROM
+          value: dns
+        - name: "DATABASE_URL"
+          valueFrom:
+            secretKeyRef:
+              name: datashop-web
+              key: database-url
+        - name: "RAILS_MASTER_KEY"
+          valueFrom:
+            secretKeyRef:
+              name: datashop-web
+              key: rails-master-key
+        - name: AWS_S3_BUCKET
+          valueFrom:
+            secretKeyRef:
+              name: datashop-web
+              key: aws-bucket-name
+        - name: AWS_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: datashop-web
+              key: aws-access-key-id
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: datashop-web
+              key: aws-secret-access-key
+        - name: CLOUDFRONT_HOST
+          valueFrom:
+            secretKeyRef:
+              name: datashop-web
+              key: cloudfront-host
+        envFrom:
+        - configMapRef:
+            name: datashop-config
+        ports:
+        - containerPort: 8080
