@@ -4,7 +4,6 @@
 
  + Put a secure password for the DB in config/secrets.tfvars.sample and rename to config/secrets.tfvars
  + Customize variables in config/config.tfvars.sample and rename to config/config.tfvars
- + Update service-account-for-alb.yml with your AWS account ID (
 
 Run the following commands:
 ```
@@ -17,7 +16,11 @@ terraform apply --var-file=./secrets/secrets.tfvars
 
 You can't run a load balancer without further steps. The previous
 terraform invocation sets up the OpenID provider, a role, and a
-policy, but not the service account inside kubernetes. For that run:
+policy, but not the service account inside kubernetes. For that,
+update service-account-for-alb.yml with your AWS account ID and the
+role name created by the terraform plan starting with
+"aws-load-balancer-" (it should be an output of the terraform
+execution).
 
 ```
 kubectl apply -f kubernetes/service-account-for-alb.yaml
@@ -28,7 +31,7 @@ Then (from https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-co
 ```
 kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
 helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller \
-  --set clusterName=staging-eks-jbw14mbB \
+  --set clusterName=<YOUR-CLUSTER-NAME> \
   --set serviceAccount.create=false \
   --set serviceAccount.name=aws-load-balancer-controller \
   -n kube-system
