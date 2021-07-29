@@ -70,20 +70,16 @@ resource "aws_default_security_group" "default" {
 resource "aws_subnet" "db" {
   vpc_id     = module.vpc.vpc_id
   cidr_block = "10.0.7.0/24"
-
-  tags = {
-    Name = "Database"
-  }
 }
 
 resource "aws_db_subnet_group" "default" {
-  name       = "db_subnet_group_datashop-2"
   subnet_ids = module.vpc.private_subnets
 
   tags = {
     Name = "DB subnet group"
   }
 }
+
 resource "aws_vpc_endpoint" "s3" {
   vpc_id     = module.vpc.vpc_id
   service_name = "com.amazonaws.${var.aws_region}.s3"
@@ -100,7 +96,8 @@ resource "aws_db_instance" "default" {
   username             = "datashop"
   password             = var.postgres_password
   multi_az             = "false"
-  db_subnet_group_name = "db_subnet_group_datashop-2"
+  db_subnet_group_name = aws_db_subnet_group.default.name
+  skip_final_snapshot = true
 }
 
 resource "aws_s3_bucket" "slices" {
