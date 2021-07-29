@@ -28,6 +28,11 @@ output "cluster_name" {
   value       = local.cluster_name
 }
 
+output "load_balancer_role" {
+  description = "AWS Load Balancer service account role ARN"
+  value       = aws_iam_policy.alb.name
+}
+
 output "cloudfront_cdn" {
   value = aws_cloudfront_distribution.datashop-frontend.domain_name
 }
