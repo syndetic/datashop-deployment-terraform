@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: datashop-web-worker
-        image: 748203753874.dkr.ecr.us-east-1.amazonaws.com/datashop-web
+        image: {{ .Values.images.webapp }}
         resources:
           requests:
             cpu: 500m
@@ -37,11 +37,6 @@ spec:
             secretKeyRef:
               name: datashop-web
               key: database-url
-        - name: "RAILS_MASTER_KEY"
-          valueFrom:
-            secretKeyRef:
-              name: datashop-web
-              key: rails-master-key
         - name: AWS_S3_BUCKET
           valueFrom:
             secretKeyRef:
@@ -62,6 +57,16 @@ spec:
             secretKeyRef:
               name: datashop-web
               key: cloudfront-host
+        - name: MAILGUN_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: datashop-web
+              key: mailgun-api-key
+        - name: SECRET_KEY_BASE
+          valueFrom:
+            secretKeyRef:
+              name: datashop-web
+              key: secret-key-base
         envFrom:
         - configMapRef:
             name: datashop-config

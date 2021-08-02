@@ -12,7 +12,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: datashop-daily-subscriptions
-              image: 748203753874.dkr.ecr.us-east-1.amazonaws.com/datashop-web:latest
+              image: {{ .Values.images.webapp }}
               command: ['bundle', 'exec', 'rails', 'subscriptions:daily_downloads']
               env:
               - name: GET_HOSTS_FROM
