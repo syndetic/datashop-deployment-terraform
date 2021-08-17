@@ -22,26 +22,6 @@ spec:
                   secretKeyRef:
                     name: datashop-web
                     key: database-url
-              - name: "RAILS_MASTER_KEY"
-                valueFrom:
-                  secretKeyRef:
-                    name: datashop-web
-                    key: rails-master-key
-              - name: "SENTRY_DSN"
-                valueFrom:
-                  secretKeyRef:
-                    name: datashop-web
-                    key: sentry-dsn
-              - name: STRIPE_PUBLISHABLE_KEY
-                valueFrom:
-                  secretKeyRef:
-                    name: datashop-web
-                    key: stripe-publishable-key
-              - name: STRIPE_SECRET_KEY
-                valueFrom:
-                  secretKeyRef:
-                    name: datashop-web
-                    key: stripe-secret-key
               - name: AWS_S3_BUCKET
                 valueFrom:
                   secretKeyRef:
@@ -67,6 +47,11 @@ spec:
                   secretKeyRef:
                     name: datashop-web
                     key: cloudfront-host
+              - name: SECRET_KEY_BASE
+                valueFrom:
+                  secretKeyRef:
+                    name: datashop-web
+                    key: secret-key-base
               envFrom:
               - configMapRef:
                   name: datashop-config
