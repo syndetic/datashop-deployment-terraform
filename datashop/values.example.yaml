@@ -1,0 +1,32 @@
+# Default values for datashop.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+webappDomainName: "ba3tgf.staging.getsyndetic.com"
+
+images:
+  webapp: 996264967846.dkr.ecr.us-east-1.amazonaws.com/datashop-web:9c958a5
+
+service:
+  port: 32434
+
+secrets:
+  secretName: datashop-web  # leave as is
+  aws_s3_bucket: bucket-name
+  aws_access_key: KEY
+  aws_secret_access_key: SECRET
+  database_url: postgres://username:password@dbhost/datashop_db
+  cloudfront_host: yourhost.cloudfront.net
+  secret_key_base: < YOUR SECRET HERE >
+
+email:
+  smtp_address: smtp_host.com
+  smtp_username: < username >
+  smtp_password: < password >
+  smtp_domain: mg.domain.com
+  smtp_port: "587"
+  smtp_authentication: login
+  from_address: noreply@yourdomain.com
+
