@@ -9,46 +9,19 @@ spec:
       containers:
         - name: dsmigrate
           image: {{ .Values.images.webapp }}
+          volumeMounts:
+            - name: datashop-secrets
+              mountPath: "/etc/syndetic"
+              readOnly: true
           command: ['rails']
           args: ['db:migrate']
           env:
           - name: GET_HOSTS_FROM
             value: dns
-          - name: "DATABASE_URL"
-            valueFrom:
-              secretKeyRef:
-                name: datashop-web
-                key: database-url
-          - name: AWS_S3_BUCKET
-            valueFrom:
-              secretKeyRef:
-                name: datashop-web
-                key: aws-bucket-name
-          - name: AWS_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: datashop-web
-                key: aws-access-key-id
-          - name: AWS_SECRET_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: datashop-web
-                key: aws-secret-access-key
-          - name: MAILGUN_API_KEY
-            valueFrom:
-              secretKeyRef:
-                name: datashop-web
-                key: mailgun-api-key
-          - name: SECRET_KEY_BASE
-            valueFrom:
-              secretKeyRef:
-                name: datashop-web
-                key: secret-key-base
-          - name: CLOUDFRONT_HOST
-            valueFrom:
-              secretKeyRef:
-                name: datashop-web
-                key: cloudfront-host
           envFrom:
           - configMapRef:
               name: datashop-config
+      volumes:
+        - name: datashop-secrets
+          secret:
+            secretName: datashop-web
