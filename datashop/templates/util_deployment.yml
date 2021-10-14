@@ -13,6 +13,9 @@ spec:
   replicas: 1
   template:
     metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/config-map.yml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/secrets.yml") . | sha256sum }}
       labels:
         app: datashop
         tier: util

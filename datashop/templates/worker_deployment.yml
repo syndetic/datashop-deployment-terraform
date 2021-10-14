@@ -16,6 +16,9 @@ spec:
       labels:
         app: datashop
         tier: worker-pool
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/config-map.yml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/secrets.yml") . | sha256sum }}
     spec:
       containers:
       - name: datashop-web-worker
