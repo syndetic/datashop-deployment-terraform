@@ -215,7 +215,7 @@ spec:
             limits:
               memory: 200Mi
             requests:
-              cpu: 500m
+              cpu: 200m
               memory: 100Mi
         volumeMounts:
         # Please don't change below read-only permissions
