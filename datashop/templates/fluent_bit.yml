@@ -95,17 +95,6 @@ data:
         storage.type        filesystem
         Read_from_Head      ${READ_FROM_HEAD}
 
-    [INPUT]
-        Name                tail
-        Tag                 application.*
-        Path                /var/log/containers/fluent-bit*
-        Parser              docker
-        DB                  /var/fluent-bit/state/flb_log.db
-        Mem_Buf_Limit       5MB
-        Skip_Long_Lines     On
-        Refresh_Interval    10
-        Read_from_Head      ${READ_FROM_HEAD}
-
     [FILTER]
         Name                kubernetes
         Match               application.*
@@ -125,7 +114,7 @@ data:
         bucket                       {{ .Values.logging.s3_bucket_name }}
         region                       {{ .Values.logging.s3_bucket_region }}
         total_file_size              250M
-        s3_key_format                /{{ .Values.logging.s3_logging_prefix }}/$TAG[4]/%Y%m%d/%H%M%S.gz
+        s3_key_format                /{{ .Values.logging.s3_logging_prefix }}/$TAG[4]/%Y%m%d/%H%M%S
         s3_key_format_tag_delimiters ._
 
   parsers.conf: |
